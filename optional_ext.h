@@ -1,6 +1,6 @@
 #include <optional>
 
-template <typename T>
+template <class T>
 class optional {
 public:
     optional() {
@@ -17,17 +17,17 @@ public:
         return o_.has_value();
     }
 
-    template <typename Func>
-    constexpr decltype(auto) transform(Func f) const& {
+    template <class UnaryOperation>
+    constexpr decltype(auto) transform(UnaryOperation op) const& {
         return has_value() ?
-            optional(f(*o_)) :
+            optional(op(*o_)) :
             optional();
     }
 
-    template <typename Func>
-    constexpr decltype(auto) transform(Func f) &&{
+    template <class UnaryOperation>
+    constexpr decltype(auto) transform(UnaryOperation op) &&{
         return has_value() ?
-            optional(f(std::move(*o_))) :
+            optional(op(std::move(*o_))) :
             optional();
     }
 
