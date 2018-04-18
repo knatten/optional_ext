@@ -18,14 +18,14 @@ public:
     }
 
     template <class UnaryOperation>
-    constexpr decltype(auto) transform(UnaryOperation op) const& {
+    constexpr optional<T> transform(UnaryOperation op) const& {
         return has_value() ?
             optional(op(*o_)) :
             optional();
     }
 
     template <class UnaryOperation>
-    constexpr decltype(auto) transform(UnaryOperation op) &&{
+    constexpr optional<T> transform(UnaryOperation op) &&{
         return has_value() ?
             optional(op(std::move(*o_))) :
             optional();
