@@ -29,6 +29,22 @@ namespace knatten {
                 OptionalReturnType();
         }
 
+        template <class UnaryOperation>
+        constexpr decltype(auto) transform_opt(UnaryOperation op) const& {
+            using OptionalReturnType = decltype(op(*o_));
+            return has_value() ?
+                op(*o_) :
+                OptionalReturnType();
+        }
+
+        template <class UnaryOperation>
+        constexpr decltype(auto) transform_opt(UnaryOperation op) && {
+            using OptionalReturnType = decltype(op(std::move(*o_)));
+            return has_value() ?
+                op(std::move(*o_)) :
+                OptionalReturnType();
+        }
+
         // Forward observers
         constexpr bool has_value() const noexcept { return o_.has_value(); }
 
