@@ -3,10 +3,14 @@
 template <class T>
 class optional {
 public:
-    optional() {
+    optional() noexcept = default;
+
+    optional(const optional<T>& rhs) = default;
+
+    optional(optional<T>&& rhs) noexcept : o_(std::move(rhs.o_)) {
     }
 
-    optional(T val) : o_(val) {
+    optional(T val) : o_(std::move(val)){
     }
 
     constexpr const T& value() const {
