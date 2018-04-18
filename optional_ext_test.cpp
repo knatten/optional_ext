@@ -1,6 +1,8 @@
 #include "optional_ext.h"
 #include "catch.hpp"
 
+using std::string;
+
 TEST_CASE("transform") {
     SECTION("with lvalue") {
         optional o(2);
@@ -39,12 +41,43 @@ TEST_CASE("transform") {
         //    return std::move(mv);
         //    });
     }
+
+    SECTION("rvalue optional can also use operation taking lvalue") {
+        optional o(2);
+        auto p = std::move(o).transform([](const int& v){ return v*2;});
+        REQUIRE(p.value() == 4);
+    }
 }
 
-TEST_CASE("Demo") {
-    optional o(2);
-    auto p = o.transform([](auto v) { return v*2;})
-        .transform([](auto v) { return v+1;})
-        .transform([](auto v) { return v*4;});
-    REQUIRE(p.value() == 20);
+struct tweet {};
+
+struct author {
+    author(string name) : name(name) {}
+    string name;
+};
+
+optional<tweet> find_first(const string& search_string);
+
+author lookup_author(const tweet& t);
+
+TEST_CASE("Simple demo") {
+
+    SECTION("old style") {
+        auto foo = find_first("foo");
+        auto foo_author(foo.has_value() ? lookup_author(foo.value()) : optional<author>());
+        REQUIRE(foo_author.value().name == "@knatten");
+    }
+
+    SECTION("new style") {
+        auto foo_author = find_first("foo").transform(lookup_author);
+        REQUIRE((*foo_author).name == "@knatten");
+    }
+}
+
+optional<tweet> find_first(const string&) {
+    return tweet();
+}
+
+author lookup_author(const tweet&) {
+    return author("@knatten");
 }

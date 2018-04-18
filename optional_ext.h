@@ -13,17 +13,19 @@ public:
 
     //non-const lvalue and const rvalue will also choose this one
     template <class UnaryOperation>
-    constexpr optional<T> transform(UnaryOperation op) const& {
+    constexpr decltype(auto) transform(UnaryOperation op) const& {
+        using OptionalReturnType = optional<decltype(op(*o_))>;
         return has_value() ?
-            optional(op(*o_)) :
-            optional();
+            OptionalReturnType(op(*o_)) :
+            OptionalReturnType();
     }
 
     template <class UnaryOperation>
-    constexpr optional<T> transform(UnaryOperation op) &&{
+    constexpr decltype(auto) transform(UnaryOperation op) &&{
+        using OptionalReturnType = optional<decltype(op(std::move(*o_)))>;
         return has_value() ?
-            optional(op(std::move(*o_))) :
-            optional();
+            OptionalReturnType(op(std::move(*o_))) :
+            OptionalReturnType();
     }
 
     // Forward observers
