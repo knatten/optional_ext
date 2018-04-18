@@ -14,12 +14,7 @@ TEST_CASE("transform") {
     }
 
     SECTION("with rvalue") {
-        optional<int> o(3);
-        auto p = std::move(o).transform([](int&& mv) {
-            auto tmp = std::move(mv);
-            tmp = tmp * 2;
-            return tmp;
-            });
+        auto p = optional<int>(3).transform([](int&& mv) { return mv * 2; });
         REQUIRE(p.value() == 6);
     }
 
@@ -29,26 +24,24 @@ TEST_CASE("transform") {
         REQUIRE(p.has_value() == false);
     }
 
-    SECTION("can't modify value") {
+    SECTION("can't use operation with non const parameter") {
+        optional o(2);
         //Doesn't compile:
-        //optional o(2);
-        //auto p = o.transform([](int& v){ v = 0;});
+        //auto p = o.transform([](int&){ return 0;});
     }
 
-    SECTION("transform cant use moving function on lvalue") {
+    SECTION("can't use operaiton with rvalue parameter on lvalue") {
+        optional o(3);
         //Doesn't compile:
-        //optional o(3);
-        //auto p = o.transform([](int&& mv) {
-        //    return std::move(mv);
-        //    });
+        //auto p = o.transform([](int&&) { return 0; });
     }
 
     SECTION("rvalue optional can also use operation taking lvalue") {
-        optional o(2);
-        auto p = std::move(o).transform([](const int& v){ return v*2;});
+        auto p = optional(2).transform([](const int& v){ return v*2;});
         REQUIRE(p.value() == 4);
     }
 }
+
 
 struct tweet {};
 
