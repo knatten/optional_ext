@@ -7,7 +7,7 @@ namespace knatten {
         //The most necessary constructors for the example
         optional() noexcept = default;
         optional(const optional<T>& rhs) = default;
-        optional(optional<T>&& rhs) noexcept : o_(std::move(rhs.o_)) { }
+        optional(optional<T>&& rhs) noexcept = default;
         optional(T val) : o_(std::move(val)) { }
 
         //Demonstration of the proposed methods
