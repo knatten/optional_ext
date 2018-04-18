@@ -65,13 +65,13 @@ TEST_CASE("Simple demo") {
 
     SECTION("old style") {
         auto foo = find_first("foo");
-        auto foo_author(foo.has_value() ? lookup_author(foo.value()) : optional<author>());
-        REQUIRE(foo_author.value().name == "@knatten");
+        auto foo_author(foo.has_value() ? lookup_author(*foo) : optional<author>());
+        REQUIRE((*foo_author).name == "@knatten");
     }
 
     SECTION("new style") {
         auto foo_author = find_first("foo").transform(lookup_author);
-        REQUIRE((*foo_author).name == "@knatten");
+        REQUIRE(foo_author->name == "@knatten");
     }
 }
 

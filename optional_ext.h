@@ -42,6 +42,9 @@ namespace knatten {
         constexpr const T&& operator*() const&& { return *std::move(o_); }
         constexpr T&& operator*() && { return *std::move(o_); }
 
+        constexpr const T* operator->() const { return o_.operator->(); }
+        constexpr T* operator->() { return o_.operator->(); }
+
     private:
         std::optional<T> o_;
     };
