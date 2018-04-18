@@ -2,6 +2,7 @@
 #include "catch.hpp"
 
 using std::string;
+using knatten::optional;
 
 TEST_CASE("transform") {
     SECTION("with lvalue") {

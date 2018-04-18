@@ -1,46 +1,48 @@
 #include <optional>
 
-template <class T>
-class optional {
-public:
-    //The most necessary constructors for the example
-    optional() noexcept = default;
-    optional(const optional<T>& rhs) = default;
-    optional(optional<T>&& rhs) noexcept : o_(std::move(rhs.o_)) { }
-    optional(T val) : o_(std::move(val)) { }
+namespace knatten {
+    template <class T>
+    class optional {
+    public:
+        //The most necessary constructors for the example
+        optional() noexcept = default;
+        optional(const optional<T>& rhs) = default;
+        optional(optional<T>&& rhs) noexcept : o_(std::move(rhs.o_)) { }
+        optional(T val) : o_(std::move(val)) { }
 
-    //Demonstration of the proposed methods
+        //Demonstration of the proposed methods
 
-    //non-const lvalue and const rvalue will also choose this one
-    template <class UnaryOperation>
-    constexpr decltype(auto) transform(UnaryOperation op) const& {
-        using OptionalReturnType = optional<decltype(op(*o_))>;
-        return has_value() ?
-            OptionalReturnType(op(*o_)) :
-            OptionalReturnType();
-    }
+        //non-const lvalue and const rvalue will also choose this one
+        template <class UnaryOperation>
+        constexpr decltype(auto) transform(UnaryOperation op) const& {
+            using OptionalReturnType = optional<decltype(op(*o_))>;
+            return has_value() ?
+                OptionalReturnType(op(*o_)) :
+                OptionalReturnType();
+        }
 
-    template <class UnaryOperation>
-    constexpr decltype(auto) transform(UnaryOperation op) &&{
-        using OptionalReturnType = optional<decltype(op(std::move(*o_)))>;
-        return has_value() ?
-            OptionalReturnType(op(std::move(*o_))) :
-            OptionalReturnType();
-    }
+        template <class UnaryOperation>
+        constexpr decltype(auto) transform(UnaryOperation op) &&{
+            using OptionalReturnType = optional<decltype(op(std::move(*o_)))>;
+            return has_value() ?
+                OptionalReturnType(op(std::move(*o_))) :
+                OptionalReturnType();
+        }
 
-    // Forward observers
-    constexpr bool has_value() const noexcept { return o_.has_value(); }
+        // Forward observers
+        constexpr bool has_value() const noexcept { return o_.has_value(); }
 
-    constexpr const T& value() const& { return o_.value(); }
-    constexpr T& value() & { return o_.value(); }
-    constexpr T&& value() && { return std::move(o_).value(); }
-    constexpr const T&& value() const&& { return std::move(o_).value(); }
+        constexpr const T& value() const& { return o_.value(); }
+        constexpr T& value() & { return o_.value(); }
+        constexpr T&& value() && { return std::move(o_).value(); }
+        constexpr const T&& value() const&& { return std::move(o_).value(); }
 
-    constexpr const T& operator*() const& { return *o_; }
-    constexpr T& operator*() & { return *o_; }
-    constexpr const T&& operator*() const&& { return *std::move(o_); }
-    constexpr T&& operator*() && { return *std::move(o_); }
+        constexpr const T& operator*() const& { return *o_; }
+        constexpr T& operator*() & { return *o_; }
+        constexpr const T&& operator*() const&& { return *std::move(o_); }
+        constexpr T&& operator*() && { return *std::move(o_); }
 
-private:
-    std::optional<T> o_;
-};
+    private:
+        std::optional<T> o_;
+    };
+}
