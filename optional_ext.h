@@ -3,24 +3,15 @@
 template <class T>
 class optional {
 public:
+    //The most necessary constructors for the example
     optional() noexcept = default;
-
     optional(const optional<T>& rhs) = default;
+    optional(optional<T>&& rhs) noexcept : o_(std::move(rhs.o_)) { }
+    optional(T val) : o_(std::move(val)) { }
 
-    optional(optional<T>&& rhs) noexcept : o_(std::move(rhs.o_)) {
-    }
+    //Demonstration of the proposed methods
 
-    optional(T val) : o_(std::move(val)){
-    }
-
-    constexpr const T& value() const {
-        return o_.value();
-    }
-
-    constexpr bool has_value() const noexcept {
-        return o_.has_value();
-    }
-
+    //non-const lvalue and const rvalue will also choose this one
     template <class UnaryOperation>
     constexpr optional<T> transform(UnaryOperation op) const& {
         return has_value() ?
@@ -34,6 +25,19 @@ public:
             optional(op(std::move(*o_))) :
             optional();
     }
+
+    // Forward observers
+    constexpr bool has_value() const noexcept { return o_.has_value(); }
+
+    constexpr const T& value() const& { return o_.value(); }
+    constexpr T& value() & { return o_.value(); }
+    constexpr T&& value() && { return std::move(o_).value(); }
+    constexpr const T&& value() const&& { return std::move(o_).value(); }
+
+    constexpr const T& operator*() const& { return *o_; }
+    constexpr T& operator*() & { return *o_; }
+    constexpr const T&& operator*() const&& { return *std::move(o_); }
+    constexpr T&& operator*() && { return *std::move(o_); }
 
 private:
     std::optional<T> o_;
