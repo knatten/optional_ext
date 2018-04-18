@@ -73,6 +73,10 @@ TEST_CASE("Simple demo") {
         auto foo_author = find_first("foo").transform(lookup_author);
         REQUIRE(foo_author->name == "@knatten");
     }
+
+    SECTION("such functional style") {
+        REQUIRE(find_first("foo").transform(lookup_author)->name == "@knatten");
+    }
 }
 
 optional<tweet> find_first(const string&) {
