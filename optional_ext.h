@@ -12,7 +12,15 @@ namespace knatten {
 
         //Demonstration of the proposed methods
 
-        //non-const lvalue and const rvalue will also choose this one
+        template <class UnaryOperation>
+        constexpr decltype(auto) transform(UnaryOperation op) & {
+            using OptionalReturnType = optional<decltype(op(*o_))>;
+            return has_value() ?
+                OptionalReturnType(op(*o_)) :
+                OptionalReturnType();
+        }
+
+        //const rvalue will also choose this one
         template <class UnaryOperation>
         constexpr decltype(auto) transform(UnaryOperation op) const& {
             using OptionalReturnType = optional<decltype(op(*o_))>;
@@ -29,6 +37,15 @@ namespace knatten {
                 OptionalReturnType();
         }
 
+        template <class UnaryOperation>
+        constexpr decltype(auto) transform_opt(UnaryOperation op) & {
+            using OptionalReturnType = decltype(op(*o_));
+            return has_value() ?
+                op(*o_) :
+                OptionalReturnType();
+        }
+
+        //const rvalue will also choose this one
         template <class UnaryOperation>
         constexpr decltype(auto) transform_opt(UnaryOperation op) const& {
             using OptionalReturnType = decltype(op(*o_));
