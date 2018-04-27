@@ -62,6 +62,34 @@ namespace knatten {
                 OptionalReturnType();
         }
 
+        template <class UnaryOperation>
+        void execute(UnaryOperation op) & {
+            if (has_value()) {
+                op(*o_);
+            }
+        }
+
+        template <class UnaryOperation>
+        void execute(UnaryOperation op) const& {
+            if (has_value()) {
+                op(*o_);
+            }
+        }
+
+        template <class UnaryOperation>
+        void execute(UnaryOperation op) && {
+            if (has_value()) {
+                op(std::move(*o_));
+            }
+        }
+
+        template <class UnaryOperation>
+        void execute(UnaryOperation op) const&& {
+            if (has_value()) {
+                op(std::move(*o_));
+            }
+        }
+
         // Forward observers
         constexpr bool has_value() const noexcept { return o_.has_value(); }
 
