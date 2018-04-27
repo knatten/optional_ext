@@ -1,6 +1,8 @@
-Experiments for extending `std::optional`
+A proposal for extending `std::optional`
 
-The implementation is in a single header file [optional_ext.h](optional_ext.h).
+The proposal itself is found in in [proposal.md](proposal.md).
+
+The example implementation is in a single header file [optional_ext.h](optional_ext.h).
 
 A demonstration is found in [demo.cpp](demo.cpp).
 

@@ -1,0 +1,117 @@
+A proposal to add convenience functions to `std::optional`
+
+Anders Schau Knatten (anders@knatten.org)
+
+## Introduction
+This proposal adds three convenience functions to `std::optional`. They all aim to eliminate a lot of `if (x.has_value())` conditionals in user code. The interface is based on Rust's `Optional` type, which is a core and very popular type in Rust.
+
+The proposal requires no changes to core language, and breaks no existing code. The target is programmers at all levels, from novices to experts.
+
+*WARNING:* This is a work in progress. In particular, I'm not happy with the names `transform_opt` and `execute`.
+
+A reference implementation with unit tests and demonstration code can be found at https://github.com/knatten/optional_ext. That is also the current home of this proposal.
+
+## Motivation and Scope
+Calling a function on an optional object currently requires the user to first check whether the object has a value. This proposal extends `std::optional` with three functions that eliminates this need.
+
+Imagine user code integrating with Twitter. It has a types `tweet` and `author`, and the following functions:
+
+    optional<tweet> find_first(const string& search_string);
+    author lookup_author(const tweet& t);
+
+If we want to search for a tweet, and get the author if a tweet was found, we currently have to do:
+
+    auto foo = find_first("foo");
+    auto foo_author(foo.has_value() ? lookup_author(*foo) : optional<author>());
+
+The first function added by this proposal is `std::optional::transform()` (corresponding to Rust's `map()`), which takes a unary operation `T->U` and returns an new `optional<U>` that:
+
+- If the original `optional<T>` was empty, is empty
+- If the original `optional<T>` object had a value, calls the unary operation on that value, and returns an `optional<U>` containing the resulting value
+
+It's easier to demonstrate in code:
+
+    auto foo_author = find_first("foo").transform(lookup_author);
+
+These chain nicely, so you can do this:
+
+    auto result = some_optional
+        .transform(function1)
+        .transform(function2)
+        .transform([](const T& t){/**/});
+
+The proposal also contains two more functions, which are discussed in more detail below
+
+- `transform_opt()`, which is like `transform` but takes an operation `T->optional<U>` instead.
+- `execute()`, which takes an operation `T->U` which, if there is a current value, calls the operation with that value. The return value `U` is ignored, and `U` can be `void`.
+
+## Impact On the Standard
+This does not depend on anything else than C++17 `std::optional`, and can be implemented in the current standard.
+
+## Technical Specification
+
+### `std::optional::transform`
+
+    template <class UnaryOperation>
+    constexpr optional<U> transform(UnaryOperation op) &
+
+    template <class UnaryOperation>
+    constexpr optional<U> transform(UnaryOperation op) const&
+
+*`op` is a function `T->U`*
+
+*Returns: `optional<U>(op(*val))` if `*this` has a value, otherwise `optional<U>()`*
+
+    template <class UnaryOperation>
+    constexpr optional<U> transform(UnaryOperation op) &&
+
+    template <class UnaryOperation>
+    constexpr optional<U> transform(UnaryOperation op) const&&
+
+*`op` is a function `T->U`*
+
+*Returns: `optional<U>(op(std::move(*val)))` if `*this` has a value, otherwise `optional<U>()`*
+
+### `std::optional::transform_opt`
+
+    template <class UnaryOperation>
+    constexpr optional<U> transform_opt(UnaryOperation op) &
+
+    template <class UnaryOperation>
+    constexpr optional<U> transform_opt(UnaryOperation op) const&
+
+*`op` is a function `T->optional<U>`*
+
+*Returns: `op(*val)` if `*this` has a value, otherwise `optional<U>()`*
+
+    template <class UnaryOperation>
+    constexpr optional<U> transform_opt(UnaryOperation op) &&
+
+    template <class UnaryOperation>
+    constexpr optional<U> transform_opt(UnaryOperation op) const&&
+
+*`op` is a function `T->optional<U>`*
+
+*Returns: `op(std::move(*val))` if `*this` has a value, otherwise `optional<U>()`*
+
+### `std::optional::execute`
+
+    template <class UnaryOperation>
+    void execute(UnaryOperation op) &
+
+    template <class UnaryOperation>
+    void execute(UnaryOperation op) const&
+
+*`op` is a function `T->U`*
+
+*Calls `op(*val)` if `*this` has a value.
+
+    template <class UnaryOperation>
+    void execute(UnaryOperation op) &&
+
+    template <class UnaryOperation>
+    void execute(UnaryOperation op) const&&
+
+*`op` is a function `T->U`*
+
+*Calls `op(std::move(*val))` if `*this` has a value.

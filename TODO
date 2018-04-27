@@ -1,2 +1,5 @@
 Consider checking that we actually moved in the functions that are supposed to do so
 Write short proposal in README.md
+Better names for the functions
+Can we restrict transform_opt to only work on functions that return an optional? Probably, using traits and enable_if or something.
+Rename repo to optional_proposal

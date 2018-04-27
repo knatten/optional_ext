@@ -21,6 +21,7 @@ namespace knatten {
         }
 
         //const rvalue will also choose this one
+        //TODO just write a function for const rvalue too, for clarity. Same for transform_opt
         template <class UnaryOperation>
         constexpr decltype(auto) transform(UnaryOperation op) const& {
             using OptionalReturnType = optional<decltype(op(*o_))>;
