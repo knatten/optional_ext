@@ -9,7 +9,7 @@ The proposal requires no changes to core language, and breaks no existing code. 
 
 *WARNING:* This is a work in progress. In particular, I'm not happy with the names `transform_opt` and `execute`.
 
-A reference implementation with unit tests and demonstration code can be found at https://github.com/knatten/optional_ext. That is also the current home of this proposal.
+A reference implementation with unit tests and demonstration code can be found at https://github.com/knatten/optional_proposal. That is also the current home of this proposal.
 
 ## Motivation and Scope
 Calling a function on an optional object currently requires the user to first check whether the object has a value. This proposal extends `std::optional` with three functions that eliminates this need.
