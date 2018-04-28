@@ -2,11 +2,14 @@
 #include "catch.hpp"
 
 #include <string>
+#include <iostream>
 
 using std::string;
 using knatten::optional;
 
-struct tweet {};
+struct tweet {
+    string content;
+};
 
 struct author {
     author(string name) : name(name) {}
@@ -52,6 +55,23 @@ TEST_CASE("Demo of transform_opt") {
 
     SECTION("such oneliner") {
         REQUIRE(find_first("foo").transform_opt(tweet_replied_to).has_value() == true);
+    }
+}
+
+TEST_CASE("Demo of execute") {
+    SECTION("old style") {
+        auto foo = find_first("foo");
+        if (foo.has_value())
+            std::cout << "Found a tweet about 'foo'!";
+    }
+
+    SECTION("new style") {
+        auto foo = find_first("foo");
+        foo.execute([](const tweet& t) { std::cout << "Found a tweet about 'foo': " << t.content; });
+    }
+
+    SECTION("such oneliner") {
+        find_first("foo").execute([](const tweet& t) { std::cout << "Found a tweet about 'foo': " << t.content; });
     }
 }
 
