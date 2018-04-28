@@ -1,14 +1,18 @@
-A proposal for extending `std::optional`
+A proposal for extending `std::optional` with convenience functions that allow you to skip a whole lot of `if has_value()` boilerplate and do things like:
 
-The proposal itself is found in in [proposal.md](proposal.md).
+    auto result = some_optional
+        .transform(function1)
+        .transform(function2);
 
-The example implementation is in a single header file [optional_ext.h](optional_ext.h).
+See [the proposal](proposal.md) for more details.
 
-A demonstration is found in [demo.cpp](demo.cpp).
+Contents:
 
-Unit tests are found in [optional_ext_test.cpp](optional_ext_test.cpp).
-
-Tests are written in [Catch 2](https://github.com/catchorg/Catch).
+- [The proposal itself, `proposal.md`](proposal.md)
+- [TODO](TODO)
+- [Example implementation in a single header file, `optional_ext.h`](optional_ext.h)
+- [A demonstration, demo.cpp](demo.cpp)
+- [Unit tests, `optional_ext_test.cpp`](optional_ext_test.cpp) (Written in [Catch 2](https://github.com/catchorg/Catch).)
 
 ## License
 MIT, see [LICENSE.txt](LICENSE.txt)
