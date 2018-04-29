@@ -48,6 +48,17 @@ The proposal also contains two more functions, which are discussed in more detai
 ## Impact On the Standard
 This does not depend on anything else than C++17 `std::optional`, and can be implemented in the current standard.
 
+## Design decisions
+
+### Things I didn't do
+Following is a list of things I either considered doing, or that were suggested to me, which were discarded.
+
+Merge `transform` and `transform_optional` into one function `transform`, that wraps the result of `op` into an `optional` only if `op` doesn't already return an optional. While this could be convenient, it results in `transform` not having a consistent type. It would make the type of `transform` be `(T->U)->optional<U>` in most cases, but `(T->U)->U` when `U` is itself `optional`.
+
+Make `transform` conditionally `noexcept`. This is not possible since `optional(U&& v)` is not `noexcept`.
+
+Make `transform_optional` conditionally `noexcept`. This is actually possible for the rvalue overloads, as `optional`'s move constructor is `noexcept` when `T`'s move constructor is `noexcept`. However, for `transform_optional`, `op` is itself expected to construct an `optional`, meaning that `op` would rarely be `noexcept`.
+
 ## Technical Specification
 
 ### `std::optional::transform`
