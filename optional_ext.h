@@ -45,7 +45,7 @@ namespace knatten {
         }
 
         template <class UnaryOperation>
-        constexpr decltype(auto) transform_opt(UnaryOperation op) & {
+        constexpr decltype(auto) transform_optional(UnaryOperation op) & {
             using OptionalReturnType = decltype(op(*o_));
             return has_value() ?
                 op(*o_) :
@@ -53,7 +53,7 @@ namespace knatten {
         }
 
         template <class UnaryOperation>
-        constexpr decltype(auto) transform_opt(UnaryOperation op) const& {
+        constexpr decltype(auto) transform_optional(UnaryOperation op) const& {
             using OptionalReturnType = decltype(op(*o_));
             return has_value() ?
                 op(*o_) :
@@ -61,7 +61,7 @@ namespace knatten {
         }
 
         template <class UnaryOperation>
-        constexpr decltype(auto) transform_opt(UnaryOperation op) && {
+        constexpr decltype(auto) transform_optional(UnaryOperation op) && {
             using OptionalReturnType = decltype(op(std::move(*o_)));
             return has_value() ?
                 op(std::move(*o_)) :
@@ -69,7 +69,7 @@ namespace knatten {
         }
 
         template <class UnaryOperation>
-        constexpr decltype(auto) transform_opt(UnaryOperation op) const&& {
+        constexpr decltype(auto) transform_optional(UnaryOperation op) const&& {
             using OptionalReturnType = decltype(op(std::move(*o_)));
             return has_value() ?
                 op(std::move(*o_)) :

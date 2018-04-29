@@ -40,7 +40,7 @@ TEST_CASE("Demo of transform") {
 
 optional<tweet> tweet_replied_to(const tweet& t);
 
-TEST_CASE("Demo of transform_opt") {
+TEST_CASE("Demo of transform_optional") {
 
     SECTION("old style") {
         auto foo = find_first("foo");
@@ -49,12 +49,12 @@ TEST_CASE("Demo of transform_opt") {
     }
 
     SECTION("new style") {
-        auto foo_replied_to = find_first("foo").transform_opt(tweet_replied_to);
+        auto foo_replied_to = find_first("foo").transform_optional(tweet_replied_to);
         REQUIRE(foo_replied_to.has_value() == true);
     }
 
     SECTION("such oneliner") {
-        REQUIRE(find_first("foo").transform_opt(tweet_replied_to).has_value() == true);
+        REQUIRE(find_first("foo").transform_optional(tweet_replied_to).has_value() == true);
     }
 }
 
@@ -86,13 +86,13 @@ TEST_CASE("Combined demo") {
 
     SECTION("new style") {
         auto orig_author = find_first("foo")
-            .transform_opt(tweet_replied_to)
+            .transform_optional(tweet_replied_to)
             .transform(lookup_author);
         REQUIRE(orig_author->name == "@knatten");
     }
 
     SECTION("such oneliner") {
-        REQUIRE(find_first("foo").transform_opt(tweet_replied_to).transform(lookup_author)->name == "@knatten");
+        REQUIRE(find_first("foo").transform_optional(tweet_replied_to).transform(lookup_author)->name == "@knatten");
     }
 }
 

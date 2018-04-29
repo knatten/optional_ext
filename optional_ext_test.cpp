@@ -70,69 +70,69 @@ TEST_CASE("transform") {
     }
 }
 
-TEST_CASE("transform_opt") {
+TEST_CASE("transform_optional") {
     SECTION("with lvalue") {
         optional o(2);
-        auto p = o.transform_opt([](int& v){ return optional(v*2);});
+        auto p = o.transform_optional([](int& v){ return optional(v*2);});
         REQUIRE(p.value() == 4);
 
-        auto p2 = o.transform_opt([](const int& v){ return optional(v*3);});
+        auto p2 = o.transform_optional([](const int& v){ return optional(v*3);});
         REQUIRE(p2.value() == 6);
 
         //Can't use these, doesn't compile
-        //o.transform_opt([](int&& v){ return optional(v*3);});
-        //o.transform_opt([](const int&& v){ return optional(v*3);});
+        //o.transform_optional([](int&& v){ return optional(v*3);});
+        //o.transform_optional([](const int&& v){ return optional(v*3);});
     }
 
     SECTION("with const lvalue") {
         const optional o(2);
-        auto p = o.transform_opt([](const int& v){ return optional(v*2);});
+        auto p = o.transform_optional([](const int& v){ return optional(v*2);});
         REQUIRE(p.value() == 4);
 
         //Can't use these, doesn't compile
-        //o.transform_opt([](int& v){ return optional(v*3);});
-        //o.transform_opt([](int&& v){ return optional(v*3);});
-        //o.transform_opt([](const int&& v){ return optional(v*3);});
+        //o.transform_optional([](int& v){ return optional(v*3);});
+        //o.transform_optional([](int&& v){ return optional(v*3);});
+        //o.transform_optional([](const int&& v){ return optional(v*3);});
     }
 
     SECTION("with rvalue") {
-        auto p = optional(3).transform_opt([](int&& mv) { return optional(mv * 2); });
+        auto p = optional(3).transform_optional([](int&& mv) { return optional(mv * 2); });
         REQUIRE(p.value() == 6);
 
-        auto p2 = optional(3).transform_opt([](const int&& mv) { return optional(mv * 3); });
+        auto p2 = optional(3).transform_optional([](const int&& mv) { return optional(mv * 3); });
         REQUIRE(p2.value() == 9);
 
-        auto p3 = optional(3).transform_opt([](const int& mv) { return optional(mv * 4); });
+        auto p3 = optional(3).transform_optional([](const int& mv) { return optional(mv * 4); });
         REQUIRE(p3.value() == 12);
 
         //Can't use these, doesn't compile
-        //optional(3).transform_opt([](int& mv) { return optional(mv * 4); });
+        //optional(3).transform_optional([](int& mv) { return optional(mv * 4); });
     }
 
     SECTION("with const rvalue") {
-        auto p = static_cast<const optional<int>&&>(optional(3)).transform_opt([](const int& mv) { return optional(mv * 2); });
+        auto p = static_cast<const optional<int>&&>(optional(3)).transform_optional([](const int& mv) { return optional(mv * 2); });
         REQUIRE(p.value() == 6);
-        auto p2 = static_cast<const optional<int>&&>(optional(3)).transform_opt([](const int&& mv) { return optional(mv * 3); });
+        auto p2 = static_cast<const optional<int>&&>(optional(3)).transform_optional([](const int&& mv) { return optional(mv * 3); });
         REQUIRE(p2.value() == 9);
 
         //Can't use these, doesn't compile
-        //static_cast<const optional<int>&&>(optional(3)).transform_opt([](int& mv) { return optional(mv * 2); });
-        //static_cast<const optional<int>&&>(optional(3)).transform_opt([](int&& mv) { return optional(mv * 2); });
+        //static_cast<const optional<int>&&>(optional(3)).transform_optional([](int& mv) { return optional(mv * 2); });
+        //static_cast<const optional<int>&&>(optional(3)).transform_optional([](int&& mv) { return optional(mv * 2); });
     }
 
     SECTION("with no value") {
         optional<int> o;
-        auto p = o.transform_opt([](int v){ return optional(v*2);});
+        auto p = o.transform_optional([](int v){ return optional(v*2);});
         REQUIRE(p.has_value() == false);
 
         const optional<int> o2;
-        auto p2 = o2.transform_opt([](int v){ return optional(v*2);});
+        auto p2 = o2.transform_optional([](int v){ return optional(v*2);});
         REQUIRE(p2.has_value() == false);
 
-        auto p3 = optional<int>().transform_opt([](int v){ return optional(v*2);});
+        auto p3 = optional<int>().transform_optional([](int v){ return optional(v*2);});
         REQUIRE(p3.has_value() == false);
 
-        auto p4 = static_cast<const optional<int>&&>(optional<int>()).transform_opt([](int v){ return optional(v*2);});
+        auto p4 = static_cast<const optional<int>&&>(optional<int>()).transform_optional([](int v){ return optional(v*2);});
         REQUIRE(p4.has_value() == false);
     }
 }
