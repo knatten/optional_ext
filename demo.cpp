@@ -58,7 +58,7 @@ TEST_CASE("Demo of transform_opt") {
     }
 }
 
-TEST_CASE("Demo of execute") {
+TEST_CASE("Demo of call") {
     SECTION("old style") {
         auto foo = find_first("foo");
         if (foo.has_value())
@@ -67,11 +67,11 @@ TEST_CASE("Demo of execute") {
 
     SECTION("new style") {
         auto foo = find_first("foo");
-        foo.execute([](const tweet& t) { std::cout << "Found a tweet about 'foo': " << t.content; });
+        foo.call([](const tweet& t) { std::cout << "Found a tweet about 'foo': " << t.content; });
     }
 
     SECTION("such oneliner") {
-        find_first("foo").execute([](const tweet& t) { std::cout << "Found a tweet about 'foo': " << t.content; });
+        find_first("foo").call([](const tweet& t) { std::cout << "Found a tweet about 'foo': " << t.content; });
     }
 }
 

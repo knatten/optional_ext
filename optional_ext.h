@@ -77,28 +77,28 @@ namespace knatten {
         }
 
         template <class UnaryOperation>
-        void execute(UnaryOperation op) & {
+        void call(UnaryOperation op) & {
             if (has_value()) {
                 op(*o_);
             }
         }
 
         template <class UnaryOperation>
-        void execute(UnaryOperation op) const& {
+        void call(UnaryOperation op) const& {
             if (has_value()) {
                 op(*o_);
             }
         }
 
         template <class UnaryOperation>
-        void execute(UnaryOperation op) && {
+        void call(UnaryOperation op) && {
             if (has_value()) {
                 op(std::move(*o_));
             }
         }
 
         template <class UnaryOperation>
-        void execute(UnaryOperation op) const&& {
+        void call(UnaryOperation op) const&& {
             if (has_value()) {
                 op(std::move(*o_));
             }

@@ -7,7 +7,7 @@ This proposal adds three convenience functions to `std::optional`. They all aim 
 
 The proposal requires no changes to core language, and breaks no existing code. The target is programmers at all levels, from novices to experts.
 
-*WARNING:* This is a work in progress. In particular, I'm not happy with the names `transform_opt` and `execute`.
+*WARNING:* This is a work in progress. In particular, I'm not happy with the name `transform_opt`.
 
 A reference implementation with unit tests and demonstration code can be found at https://github.com/knatten/optional_proposal. That is also the current home of this proposal.
 
@@ -43,7 +43,7 @@ These chain nicely, so you can do this:
 The proposal also contains two more functions, which are discussed in more detail below
 
 - `transform_opt()`, which is like `transform` but takes an operation `T->optional<U>` instead.
-- `execute()`, which takes an operation `T->U` which, if there is a current value, calls the operation with that value. The return value `U` is ignored, and `U` can be `void`.
+- `call()`, which takes an operation `T->U` which, if there is a current value, calls the operation with that value. The return value `U` is ignored, and `U` can be `void`.
 
 ## Impact On the Standard
 This does not depend on anything else than C++17 `std::optional`, and can be implemented in the current standard.
@@ -94,23 +94,23 @@ This does not depend on anything else than C++17 `std::optional`, and can be imp
 
 *Returns: `op(std::move(*val))` if `*this` has a value, otherwise `optional<U>()`*
 
-### `std::optional::execute`
+### `std::optional::call`
 
     template <class UnaryOperation>
-    void execute(UnaryOperation op) &
+    void call(UnaryOperation op) &
 
     template <class UnaryOperation>
-    void execute(UnaryOperation op) const&
+    void call(UnaryOperation op) const&
 
 *`op` is a function `T->U`*
 
 *Calls `op(*val)` if `*this` has a value.
 
     template <class UnaryOperation>
-    void execute(UnaryOperation op) &&
+    void call(UnaryOperation op) &&
 
     template <class UnaryOperation>
-    void execute(UnaryOperation op) const&&
+    void call(UnaryOperation op) const&&
 
 *`op` is a function `T->U`*
 

@@ -137,78 +137,78 @@ TEST_CASE("transform_opt") {
     }
 }
 
-TEST_CASE("execute") {
+TEST_CASE("call") {
     SECTION("with lvalue") {
         auto o = optional(2);
         bool called_non_const = false;
-        o.execute([&called_non_const](int&){ called_non_const = true; });
+        o.call([&called_non_const](int&){ called_non_const = true; });
         REQUIRE(called_non_const == true);
 
         bool called_const = false;
-        o.execute([&called_const](const int&){ called_const = true; });
+        o.call([&called_const](const int&){ called_const = true; });
         REQUIRE(called_const == true);
 
         //Can't use these, doesn't compile
-        //o.execute([](int&&){});
-        //o.execute([](const int&&){});
+        //o.call([](int&&){});
+        //o.call([](const int&&){});
     }
     SECTION("with const lvalue") {
         const auto o = optional(2);
         bool called_const = false;
-        o.execute([&called_const](const int&){ called_const = true; });
+        o.call([&called_const](const int&){ called_const = true; });
         REQUIRE(called_const == true);
 
         //Can't use these, doesn't compile
-        //o.execute([](int&){});
-        //o.execute([](int&&){});
-        //o.execute([](const int&&){});
+        //o.call([](int&){});
+        //o.call([](int&&){});
+        //o.call([](const int&&){});
     }
     SECTION("with rvalue") {
         bool called_rvalue = false;
-        optional<int>(2).execute([&called_rvalue](int&&){ called_rvalue = true; });
+        optional<int>(2).call([&called_rvalue](int&&){ called_rvalue = true; });
         REQUIRE(called_rvalue == true);
 
         bool called_const_rvalue = false;
-        optional<int>(2).execute([&called_const_rvalue](const int&&){ called_const_rvalue = true; });
+        optional<int>(2).call([&called_const_rvalue](const int&&){ called_const_rvalue = true; });
         REQUIRE(called_const_rvalue == true);
 
         bool called_const_lvalue = false;
-        optional<int>(2).execute([&called_const_lvalue](int&&){ called_const_lvalue = true; });
+        optional<int>(2).call([&called_const_lvalue](int&&){ called_const_lvalue = true; });
         REQUIRE(called_const_lvalue == true);
 
         //Can't use these, doesn't compile
-        //optional<int>(2).execute([](int&){});
+        //optional<int>(2).call([](int&){});
     }
     SECTION("with const rvalue") {
         bool called_const_rvalue = false;
-        static_cast<const optional<int>&&>(optional<int>(2)).execute([&called_const_rvalue](const int&&){ called_const_rvalue = true; });
+        static_cast<const optional<int>&&>(optional<int>(2)).call([&called_const_rvalue](const int&&){ called_const_rvalue = true; });
         REQUIRE(called_const_rvalue == true);
 
         bool called_const_lvalue = false;
-        static_cast<const optional<int>&&>(optional<int>(2)).execute([&called_const_lvalue](const int&){ called_const_lvalue = true; });
+        static_cast<const optional<int>&&>(optional<int>(2)).call([&called_const_lvalue](const int&){ called_const_lvalue = true; });
         REQUIRE(called_const_lvalue == true);
 
         //Can't use these, doesn't compile
-        //static_cast<const optional<int>&&>(optional<int>(2)).execute([](int&&){});
-        //static_cast<const optional<int>&&>(optional<int>(2)).execute([](int&){});
+        //static_cast<const optional<int>&&>(optional<int>(2)).call([](int&&){});
+        //static_cast<const optional<int>&&>(optional<int>(2)).call([](int&){});
     }
     SECTION("with no value") {
         bool called1 = false;
         optional<int> o1;
-        o1.execute([&called1](int){ called1=true;});
+        o1.call([&called1](int){ called1=true;});
         REQUIRE(called1 == false);
 
         bool called2 = false;
         const optional<int> o2;
-        o2.execute([&called2](int){ called2=true;});
+        o2.call([&called2](int){ called2=true;});
         REQUIRE(called2 == false);
 
         bool called3 = false;
-        optional<int>().execute([&called3](int){ called3=true;});
+        optional<int>().call([&called3](int){ called3=true;});
         REQUIRE(called3 == false);
 
         bool called4 = false;
-        static_cast<optional<int>>(optional<int>()).execute([&called4](int){ called4=true;});
+        static_cast<optional<int>>(optional<int>()).call([&called4](int){ called4=true;});
         REQUIRE(called4 == false);
     }
 }
