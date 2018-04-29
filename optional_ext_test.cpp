@@ -45,11 +45,12 @@ TEST_CASE("transform") {
     SECTION("with const rvalue") {
         auto p = static_cast<const optional<int>&&>(optional<int>(2)).transform([](const int& mv){ return mv * 2;});
         REQUIRE(p.value() == 4);
+        auto p2 = static_cast<const optional<int>&&>(optional<int>(2)).transform([](const int&& mv){ return mv * 3;});
+        REQUIRE(p2.value() == 6);
 
         //Can't use these, doesn't compile
         //static_cast<const optional<int>&&>(optional<int>(2)).transform([](int& mv){ return mv * 2;});
         //static_cast<const optional<int>&&>(optional<int>(2)).transform([](int&& mv){ return mv * 2;});
-        //static_cast<const optional<int>&&>(optional<int>(2)).transform([](const int&& mv){ return mv * 2;});
     }
 
     SECTION("with no value") {
@@ -111,11 +112,12 @@ TEST_CASE("transform_opt") {
     SECTION("with const rvalue") {
         auto p = static_cast<const optional<int>&&>(optional(3)).transform_opt([](const int& mv) { return optional(mv * 2); });
         REQUIRE(p.value() == 6);
+        auto p2 = static_cast<const optional<int>&&>(optional(3)).transform_opt([](const int&& mv) { return optional(mv * 3); });
+        REQUIRE(p2.value() == 9);
 
         //Can't use these, doesn't compile
         //static_cast<const optional<int>&&>(optional(3)).transform_opt([](int& mv) { return optional(mv * 2); });
         //static_cast<const optional<int>&&>(optional(3)).transform_opt([](int&& mv) { return optional(mv * 2); });
-        //static_cast<const optional<int>&&>(optional(3)).transform_opt([](const int&& mv) { return optional(mv * 2); });
     }
 
     SECTION("with no value") {

@@ -20,8 +20,6 @@ namespace knatten {
                 OptionalReturnType();
         }
 
-        //const rvalue will also choose this one
-        //TODO just write a function for const rvalue too, for clarity. Same for transform_opt
         template <class UnaryOperation>
         constexpr decltype(auto) transform(UnaryOperation op) const& {
             using OptionalReturnType = optional<decltype(op(*o_))>;
@@ -39,6 +37,14 @@ namespace knatten {
         }
 
         template <class UnaryOperation>
+        constexpr decltype(auto) transform(UnaryOperation op) const&&{
+            using OptionalReturnType = optional<decltype(op(std::move(*o_)))>;
+            return has_value() ?
+                OptionalReturnType(op(std::move(*o_))) :
+                OptionalReturnType();
+        }
+
+        template <class UnaryOperation>
         constexpr decltype(auto) transform_opt(UnaryOperation op) & {
             using OptionalReturnType = decltype(op(*o_));
             return has_value() ?
@@ -46,7 +52,6 @@ namespace knatten {
                 OptionalReturnType();
         }
 
-        //const rvalue will also choose this one
         template <class UnaryOperation>
         constexpr decltype(auto) transform_opt(UnaryOperation op) const& {
             using OptionalReturnType = decltype(op(*o_));
@@ -57,6 +62,14 @@ namespace knatten {
 
         template <class UnaryOperation>
         constexpr decltype(auto) transform_opt(UnaryOperation op) && {
+            using OptionalReturnType = decltype(op(std::move(*o_)));
+            return has_value() ?
+                op(std::move(*o_)) :
+                OptionalReturnType();
+        }
+
+        template <class UnaryOperation>
+        constexpr decltype(auto) transform_opt(UnaryOperation op) const&& {
             using OptionalReturnType = decltype(op(std::move(*o_)));
             return has_value() ?
                 op(std::move(*o_)) :
