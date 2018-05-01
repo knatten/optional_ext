@@ -1,4 +1,5 @@
 #include "optional_ext.h"
+#include "supporting_types.h"
 #include "catch.hpp"
 
 using std::string;
@@ -211,4 +212,26 @@ TEST_CASE("call") {
         static_cast<optional<int>>(optional<int>()).call([&called4](int){ called4=true;});
         REQUIRE(called4 == false);
     }
+}
+
+using std::cout, std::endl;
+TEST_CASE("deleteme") {
+    unmovable a;
+    unmovable b(a);
+    unmovable c = a;
+    unmovable d;
+    d = a;
+    /* unmovable e(std::move(d)); */
+    /* c = std::move(b); */
+}
+
+TEST_CASE("deleteme2") {
+    uncopyable a;
+    /* uncopyable b(a); */
+    /* uncopyable c = a; */
+    /* uncopyable d; */
+    /* d = a; */
+    uncopyable e(std::move(a));
+    uncopyable f;
+    f = std::move(e);
 }
