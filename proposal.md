@@ -3,7 +3,7 @@ A proposal to add convenience functions to `std::optional`
 Anders Schau Knatten (anders@knatten.org)
 
 ## Introduction
-This proposal adds three convenience functions to `std::optional`. They all aim to eliminate a lot of `if (x.has_value())` conditionals in user code. The interface is based on Rust's `Optional` type, which is a core and very popular type in Rust.
+This proposal adds three convenience functions to `std::optional`. They all aim to eliminate a lot of `if (x.has_value())` conditionals in user code. The interface is based on Rust's `Option` type, which is a core and very popular type in Rust.
 
 The proposal requires no changes to core language, and breaks no existing code. The target is programmers at all levels, from novices to experts.
 
