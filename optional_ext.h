@@ -1,3 +1,5 @@
+#ifndef OPTIONAL_EXT_H
+#define OPTIONAL_EXT_H
 #include <optional>
 
 namespace knatten {
@@ -77,28 +79,28 @@ namespace knatten {
         }
 
         template <class UnaryOperation>
-        void call(UnaryOperation op) & {
+        constexpr void call(UnaryOperation op) & {
             if (has_value()) {
                 op(*o_);
             }
         }
 
         template <class UnaryOperation>
-        void call(UnaryOperation op) const& {
+        constexpr void call(UnaryOperation op) const& {
             if (has_value()) {
                 op(*o_);
             }
         }
 
         template <class UnaryOperation>
-        void call(UnaryOperation op) && {
+        constexpr void call(UnaryOperation op) && {
             if (has_value()) {
                 op(std::move(*o_));
             }
         }
 
         template <class UnaryOperation>
-        void call(UnaryOperation op) const&& {
+        constexpr void call(UnaryOperation op) const&& {
             if (has_value()) {
                 op(std::move(*o_));
             }
@@ -124,3 +126,4 @@ namespace knatten {
         std::optional<T> o_;
     };
 }
+#endif

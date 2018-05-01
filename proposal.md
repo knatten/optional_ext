@@ -108,20 +108,20 @@ Make `transform_optional` conditionally `noexcept`. This is actually possible fo
 ### `std::optional::call`
 
     template <class UnaryOperation>
-    void call(UnaryOperation op) &
+    constexpr void call(UnaryOperation op) &
 
     template <class UnaryOperation>
-    void call(UnaryOperation op) const&
+    constexpr void call(UnaryOperation op) const&
 
 *`op` is a function `T->U`*
 
 *Calls `op(*val)` if `*this` has a value.
 
     template <class UnaryOperation>
-    void call(UnaryOperation op) &&
+    constexpr void call(UnaryOperation op) &&
 
     template <class UnaryOperation>
-    void call(UnaryOperation op) const&&
+    constexpr void call(UnaryOperation op) const&&
 
 *`op` is a function `T->U`*
 

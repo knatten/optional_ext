@@ -1,4 +1,3 @@
-Make the `constexpr`s conditional
 Consider checking that we actually moved in the functions that are supposed to do so
 Better names for the functions
 Can we restrict transform_optional to only work on functions that return an optional? Probably, using traits and enable_if or something.
