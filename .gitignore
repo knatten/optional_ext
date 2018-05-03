@@ -4,3 +4,4 @@ CMakeFiles
 Makefile
 *.cmake
 main
+*.md.html
