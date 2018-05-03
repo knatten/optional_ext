@@ -11,6 +11,8 @@ The proposal requires no changes to core language, and breaks no existing code. 
 
 A reference implementation with unit tests and demonstration code can be found at https://github.com/knatten/optional_proposal. That is also the current home of this proposal.
 
+*Note:* If this proposal gathers support, similar functions should be added to `std::expected`, proposed in P0323R3. I'll defer that work until this proposal has been discussed more widely, to narrow the scope a bit.
+
 ## Motivation and Scope
 Calling a function on an optional object currently requires the user to first check whether the object has a value. This proposal extends `std::optional` with three functions that eliminates this need.
 
