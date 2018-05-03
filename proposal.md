@@ -73,6 +73,8 @@ Following is a list of things I either considered doing, or that were suggested 
 
 *Returns: `optional<U>(op(*val))` if `*this` has a value, otherwise `optional<U>()`*
 
+*Remarks: If `is_trivially_copy_constructible_v<T>` is `true` and `op(*val)` is `constexpr`, this function shall be `constexpr`.*
+
     template <class UnaryOperation>
     constexpr optional<U> transform(UnaryOperation op) &&
 
@@ -82,6 +84,8 @@ Following is a list of things I either considered doing, or that were suggested 
 *`op` is a function `T->U`*
 
 *Returns: `optional<U>(op(std::move(*val)))` if `*this` has a value, otherwise `optional<U>()`*
+
+*Remarks: If `is_trivially_move_constructible_v<T>` is `true` and `op(std::move(*val))` is `constexpr`, this function shall be `constexpr`.*
 
 ### `std::optional::transform_optional`
 
@@ -95,6 +99,8 @@ Following is a list of things I either considered doing, or that were suggested 
 
 *Returns: `op(*val)` if `*this` has a value, otherwise `optional<U>()`*
 
+*Remarks: If `is_trivially_copy_constructible_v<T>` is `true` and `op(*val)` is `constexpr`, this function shall be `constexpr`.*
+
     template <class UnaryOperation>
     constexpr optional<U> transform_optional(UnaryOperation op) &&
 
@@ -104,6 +110,8 @@ Following is a list of things I either considered doing, or that were suggested 
 *`op` is a function `T->optional<U>`*
 
 *Returns: `op(std::move(*val))` if `*this` has a value, otherwise `optional<U>()`*
+
+*Remarks: If `is_trivially_move_constructible_v<T>` is `true` and `op(std::move(*val))` is `constexpr`, this function shall be `constexpr`.*
 
 ### `std::optional::call`
 
@@ -115,7 +123,9 @@ Following is a list of things I either considered doing, or that were suggested 
 
 *`op` is a function `T->U`*
 
-*Calls `op(*val)` if `*this` has a value.
+*Calls `op(*val)` if `*this` has a value.*
+
+*Remarks: If `op(*val)` is `constexpr`, this function shall be `constexpr`.*
 
     template <class UnaryOperation>
     constexpr void call(UnaryOperation op) &&
@@ -125,4 +135,6 @@ Following is a list of things I either considered doing, or that were suggested 
 
 *`op` is a function `T->U`*
 
-*Calls `op(std::move(*val))` if `*this` has a value.
+*Calls `op(std::move(*val))` if `*this` has a value.*
+
+*Remarks: If `op(std::move(*val))` is `constexpr`, this function shall be `constexpr`.*
